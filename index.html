@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>After the Alarm — A Personal Recovery Toolkit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #faf8f4;
+      --warm-white: #f5f2ed;
+      --text: #2c2a27;
+      --text-muted: #8a8680;
+      --text-light: #b8b4ae;
+      --accent: #5b8a6e;
+      --accent-warm: #c17f4a;
+      --accent-red: #c05c5c;
+      --border: rgba(44,42,39,0.1);
+      --border-light: rgba(44,42,39,0.06);
+      --shadow: 0 2px 20px rgba(44,42,39,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* Language switcher */
+    .lang-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(250,248,244,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 32px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lang-bar a {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .lang-bar a:hover { color: var(--text); background: var(--border-light); }
+    .lang-bar a.active { color: var(--accent); font-weight: 500; }
+
+    /* Hero */
+    .hero {
+      padding: 120px 32px 64px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-intro {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+
+    .hero-note {
+      display: inline-block;
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 14px 20px;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    /* Phases */
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+
+    .phase {
+      margin-bottom: 56px;
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .phase-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .phase-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .phase-title {
+      font-family: 'Lora', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+      margin-left: auto;
+      font-style: italic;
+    }
+
+    /* Tool cards */
+    .tool {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s;
+    }
+
+    .tool:hover { box-shadow: 0 4px 32px rgba(44,42,39,0.1); }
+
+    .tool-header {
+      padding: 20px 24px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      user-select: none;
+    }
+
+    .tool-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .tool-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .tool-duration {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(91,138,110,0.08);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .tool-chevron {
+      font-size: 12px;
+      color: var(--text-light);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .tool.open .tool-chevron { transform: rotate(180deg); }
+
+    .tool-body {
+      display: none;
+      padding: 0 24px 24px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .tool.open .tool-body { display: block; }
+
+    .tool-section {
+      margin-top: 18px;
+    }
+
+    .tool-section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .tool-section p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .tool-section.why p {
+      font-style: italic;
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    /* Footer note */
+    .footer-note {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 32px 64px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-note p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    .footer-note strong {
+      color: var(--accent-red);
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .hero { padding: 100px 20px 48px; }
+      .content { padding: 0 20px 60px; }
+      .footer-note { padding: 24px 20px 48px; }
+      .lang-bar { padding: 12px 20px; }
+      .phase-title { display: none; }
+    }
+
+    /* Fade in */
+    .phase {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.5s ease forwards;
+    }
+    .phase:nth-child(1) { animation-delay: 0.1s; }
+    .phase:nth-child(2) { animation-delay: 0.2s; }
+    .phase:nth-child(3) { animation-delay: 0.3s; }
+
+    .hero-eyebrow, .hero h1, .hero-intro, .hero-note {
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+    }
+    .hero-eyebrow { animation-delay: 0.05s; }
+    .hero h1 { animation-delay: 0.1s; }
+    .hero-intro { animation-delay: 0.15s; }
+    .hero-note { animation-delay: 0.2s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="lang-bar">
+    <a href="index.html" class="active">EN</a>
+    <a href="he.html">עב</a>
+  </nav>
+
+  <header class="hero">
+    <p class="hero-eyebrow">Personal Recovery Toolkit</p>
+    <h1>After the alarm,<br><em>here's what helps.</em></h1>
+    <p class="hero-intro">
+      Living with unpredictable missile alarms means my nervous system gets activated whether I want it to or not. These are the tools I use to move from threat mode back to grounded — as quickly as possible.
+    </p>
+    <div class="hero-note">
+      I don't have to feel calm for these to work. The goal isn't to not be scared — it's to move the activation through my system so it doesn't accumulate.
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- Phase 1 -->
+    <section class="phase">
+      <div class="phase-header">
+        <div class="phase-dot" style="background:#c05c5c"></div>
+        <span class="phase-label" style="color:#c05c5c">Phase 1</span>
+        <span class="phase-title">During &amp; immediately after</span>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">Physiological Sigh</span>
+            <span class="tool-duration">60 sec</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">How</div>
+            <p>Double inhale through the nose — sniff on top of a full inhale — then one long, complete exhale through the mouth. Repeat 3–5 times. This is the fastest evidence-based method to drop cortisol in the moment.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">Why it works</div>
+            <p>Deflates the air sacs in the lungs that compress during stress response, rapidly lowering heart rate.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">Cold Water on Face & Wrists</span>
+            <span class="tool-duration">30 sec</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">How</div>
+            <p>Run cold water over wrists and face, or hold a cold glass. Activates the diving reflex — an immediate parasympathetic response that works even when I can't think straight.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">Why it works</div>
+            <p>Triggers the vagus nerve via the diving reflex. No app required, no breathing technique to remember.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">Orienting Response</span>
+            <span class="tool-duration">2 min</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">How</div>
+            <p>Slowly look around the room. Name 5 things I can see. Let my eyes move deliberately rather than scanning for threat. This is what my nervous system needs to signal "safe now."</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">Why it works</div>
+            <p>When in threat mode, our gaze narrows. Slow, deliberate looking signals safety to the brainstem.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 2 -->
+    <section class="phase">
+      <div class="phase-header">
+        <div class="phase-dot" style="background:#c17f4a"></div>
+        <span class="phase-label" style="color:#c17f4a">Phase 2</span>
+        <span class="phase-title">10–20 minutes after</span>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">Meditation App — SOS Session</span>
+            <span class="tool-duration">10 min</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">How</div>
+            <p>Open the app and use any short session. If nothing feels right, just sit and follow the breathing guidance. I don't have to feel calm — I just stay with it.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">Why it works</div>
+            <p>Consistent practice builds the return-to-baseline speed over time, even when a single session doesn't feel like enough.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">Shake / Movement Discharge</span>
+            <span class="tool-duration">3–5 min</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">How</div>
+            <p>Walk briskly, do jumping jacks, or literally shake my body. Animals discharge threat activation through movement — humans tend to suppress it. Let it out.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">Why it works</div>
+            <p>Adrenaline and cortisol were released to fuel action. Movement metabolizes them faster than sitting still.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">Journal — Containment</span>
+            <span class="tool-duration">5 min</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">How</div>
+            <p>Write what happened, what I felt, and then explicitly write: <em>"This is contained on this page. I am returning to my day."</em> The act of containment is the tool.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">Why it works</div>
+            <p>Externalizing experience reduces amygdala activation. The written containment statement trains the brain to close loops.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 3 -->
+    <section class="phase">
+      <div class="phase-header">
+        <div class="phase-dot" style="background:#5b8a6e"></div>
+        <span class="phase-label" style="color:#5b8a6e">Phase 3</span>
+        <span class="phase-title">Rest of day recovery</span>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">Extend the Walk</span>
+            <span class="tool-duration">20–30 min</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">How</div>
+            <p>If I had a planned walk, make it longer. If not, go now. Outdoors preferred — green or natural environments measurably reduce cortisol more than indoor walks.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">Why it works</div>
+            <p>Sustained low-intensity movement is one of the most reliable HRV recovery interventions known.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">Be Honest About My Capacity</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">How</div>
+            <p>After an alarm, my prefrontal cortex is partially offline for 20–60 minutes. This is not the time for deep strategic thinking. Acknowledge this instead of pushing through — it's more efficient in the long run.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">Why it works</div>
+            <p>Stress hormones actively impair executive function. Working through it produces lower quality output and extends recovery time.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer-note">
+    <p>
+      <strong>Important:</strong> I don't have to feel calm for these to work. The goal isn't to not be scared — it's to move activation through my system so it doesn't accumulate. Doing the tools even when they feel inadequate is still effective.
+    </p>
+  </footer>
+
+  <script>
+    function toggleTool(el) {
+      el.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

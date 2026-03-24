@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>אחרי האזעקה — ערכת ההתאוששות האישית שלי</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&family=Heebo:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #faf8f4;
+      --warm-white: #f5f2ed;
+      --text: #2c2a27;
+      --text-muted: #8a8680;
+      --text-light: #b8b4ae;
+      --accent: #5b8a6e;
+      --accent-warm: #c17f4a;
+      --accent-red: #c05c5c;
+      --border: rgba(44,42,39,0.1);
+      --border-light: rgba(44,42,39,0.06);
+      --shadow: 0 2px 20px rgba(44,42,39,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: 'Heebo', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      min-height: 100vh;
+      direction: rtl;
+    }
+
+    /* Language switcher */
+    .lang-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(250,248,244,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 32px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lang-bar a {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .lang-bar a:hover { color: var(--text); background: var(--border-light); }
+    .lang-bar a.active { color: var(--accent); font-weight: 500; }
+
+    /* Hero */
+    .hero {
+      padding: 120px 32px 64px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Heebo', sans-serif;
+      font-size: clamp(30px, 5vw, 50px);
+      font-weight: 300;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .hero-intro {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.9;
+      margin-bottom: 40px;
+    }
+
+    .hero-note {
+      display: inline-block;
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-right: 3px solid var(--accent);
+      border-left: none;
+      padding: 14px 20px;
+      border-radius: 8px 0 0 8px;
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* Phases */
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+
+    .phase {
+      margin-bottom: 56px;
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+
+    .phase-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .phase-label {
+      font-family: 'Heebo', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+    }
+
+    .phase-title {
+      font-family: 'Heebo', sans-serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--text);
+      margin-right: auto;
+      margin-left: 0;
+    }
+
+    /* Tool cards */
+    .tool {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s;
+    }
+
+    .tool:hover { box-shadow: 0 4px 32px rgba(44,42,39,0.1); }
+
+    .tool-header {
+      padding: 20px 24px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      user-select: none;
+    }
+
+    .tool-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-direction: row-reverse;
+    }
+
+    .tool-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .tool-duration {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(91,138,110,0.08);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .tool-chevron {
+      font-size: 12px;
+      color: var(--text-light);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .tool.open .tool-chevron { transform: rotate(180deg); }
+
+    .tool-body {
+      display: none;
+      padding: 0 24px 24px;
+      border-top: 1px solid var(--border-light);
+      text-align: right;
+    }
+
+    .tool.open .tool-body { display: block; }
+
+    .tool-section {
+      margin-top: 18px;
+    }
+
+    .tool-section-label {
+      font-family: 'Heebo', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .tool-section p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    .tool-section.why p {
+      font-style: italic;
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    /* Footer note */
+    .footer-note {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 32px 64px;
+      border-top: 1px solid var(--border);
+      text-align: right;
+    }
+
+    .footer-note p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.9;
+      max-width: 560px;
+    }
+
+    .footer-note strong {
+      color: var(--accent-red);
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .hero { padding: 100px 20px 48px; }
+      .content { padding: 0 20px 60px; }
+      .footer-note { padding: 24px 20px 48px; }
+      .lang-bar { padding: 12px 20px; }
+      .phase-title { display: none; }
+    }
+
+    /* Fade in */
+    .phase {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.5s ease forwards;
+    }
+    .phase:nth-child(1) { animation-delay: 0.1s; }
+    .phase:nth-child(2) { animation-delay: 0.2s; }
+    .phase:nth-child(3) { animation-delay: 0.3s; }
+
+    .hero-eyebrow, .hero h1, .hero-intro, .hero-note {
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+    }
+    .hero-eyebrow { animation-delay: 0.05s; }
+    .hero h1 { animation-delay: 0.1s; }
+    .hero-intro { animation-delay: 0.15s; }
+    .hero-note { animation-delay: 0.2s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="lang-bar">
+    <a href="index.html">EN</a>
+    <a href="he.html" class="active">עב</a>
+  </nav>
+
+  <header class="hero">
+    <p class="hero-eyebrow">ערכת התאוששות אישית</p>
+    <h1>אחרי האזעקה,<br><em>הנה מה שעוזר לי.</em></h1>
+    <p class="hero-intro">
+      החיים עם אזעקות בלתי צפויות אומרים שהמערכת העצבית שלי נכנסת לכוננות, בין אם אני רוצה ובין אם לאו. אלה הכלים שאני משתמשת בהם כדי לעבור ממצב איום חזרה למצב מאוזן — כמה שיותר מהר.
+    </p>
+    <div class="hero-note">
+      אני לא חייבת להרגיש רגועה כדי שאלה יעבדו. המטרה היא לא לא לפחד — אלא להעביר את ההפעלה דרך המערכת שלי כדי שלא תצטבר.
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- Phase 1 -->
+    <section class="phase">
+      <div class="phase-header">
+        <div class="phase-dot" style="background:#c05c5c"></div>
+        <span class="phase-label" style="color:#c05c5c">שלב 1</span>
+        <span class="phase-title">במהלך האזעקה ומיד אחריה</span>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">נשימת ה״אנחה הפיזיולוגית״</span>
+            <span class="tool-duration">60 שניות</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">איך</div>
+            <p>שאיפה כפולה דרך האף — שאיפה קצרה נוספת על גבי שאיפה מלאה — ואז נשיפה אחת ארוכה ומלאה דרך הפה. לחזור 3–5 פעמים. זו השיטה המהירה ביותר המבוססת על מחקר להורדת קורטיזול ברגע נתון.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">למה זה עובד</div>
+            <p>מרוקן את שקי האוויר בריאות שהתכווצו במהלך תגובת הלחץ, ומוריד את קצב הלב במהירות.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">מים קרים על הפנים ופרקי הידיים</span>
+            <span class="tool-duration">30 שניות</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">איך</div>
+            <p>מעבירה מים קרים על פרקי הידיים והפנים, או מחזיקה כוס קרה. מפעילה את רפלקס הצלילה — תגובה פאראסימפתטית מיידית שעובדת גם כשאני לא מסוגלת לחשוב ברור.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">למה זה עובד</div>
+            <p>מגרה את עצב הוואגוס דרך רפלקס הצלילה. לא צריך אפליקציה ולא טכניקת נשימה שצריך לזכור.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">תגובת ״אוריינטציה״ — לאן אני</span>
+            <span class="tool-duration">2 דקות</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">איך</div>
+            <p>מסתכלת לאט סביב החדר. מונה 5 דברים שאני רואה. מניחה לעיניים לנוע בכוונה במקום לסרוק אחר איום. זה מה שהמערכת העצבית שלי צריכה כדי לאותת ״עכשיו בטוח.״</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">למה זה עובד</div>
+            <p>כשאנחנו במצב איום, מבטנו מצטמצם. הסתכלות איטית ומכוונת מאותתת לגזע המוח שאנחנו בטוחים.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 2 -->
+    <section class="phase">
+      <div class="phase-header">
+        <div class="phase-dot" style="background:#c17f4a"></div>
+        <span class="phase-label" style="color:#c17f4a">שלב 2</span>
+        <span class="phase-title">10–20 דקות אחרי</span>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">אפליקציית מדיטציה — סשן חירום</span>
+            <span class="tool-duration">10 דקות</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">איך</div>
+            <p>פותחת את האפליקציה ומשתמשת בסשן קצר כלשהו. אם שום דבר לא מרגיש נכון, פשוט יושבת ועוקבת אחרי ההנחיות לנשימה. אני לא חייבת להרגיש רגועה — רק נשארת עם זה.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">למה זה עובד</div>
+            <p>תרגול עקבי בונה את מהירות החזרה לנורמה לאורך זמן, גם כשסשן בודד לא מרגיש מספיק.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">ריצה קלה / ניעור הגוף</span>
+            <span class="tool-duration">3–5 דקות</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">איך</div>
+            <p>הולכת בהליכה מהירה, עושה קפיצות, או פשוט מנערת את הגוף. בעלי חיים פורקים את הפעלת האיום דרך תנועה — בני אדם נוטים לדכא אותה. כדאי לשחרר.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">למה זה עובד</div>
+            <p>אדרנלין וקורטיזול שוחררו כדי להניע פעולה. תנועה מפרקת אותם מהר יותר מאשר ישיבה.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">יומן — ״הכלה״</span>
+            <span class="tool-duration">5 דקות</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">איך</div>
+            <p>כותבת מה קרה, מה הרגשתי, ואז כותבת במפורש: <em>״זה כלוא בדף הזה. אני חוזרת ליום שלי.״</em> מעשה ה״הכלה״ עצמו הוא הכלי.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">למה זה עובד</div>
+            <p>הוצאת חוויה החוצה מפחיתה את הפעלת האמיגדלה. משפט ה״הכלה" הכתוב מאמן את המוח לסגור לולאות.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 3 -->
+    <section class="phase">
+      <div class="phase-header">
+        <div class="phase-dot" style="background:#5b8a6e"></div>
+        <span class="phase-label" style="color:#5b8a6e">שלב 3</span>
+        <span class="phase-title">שאר היום — התאוששות</span>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">להאריך את ההליכה</span>
+            <span class="tool-duration">20–30 דקות</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">איך</div>
+            <p>אם תכננתי הליכה, מאריכה אותה. אם לא — יוצאת עכשיו. עדיפה הליכה בחוץ — סביבות ירוקות או טבעיות מפחיתות קורטיזול יותר מהליכה פנים-אחרי-פנים.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">למה זה עובד</div>
+            <p>תנועה קלה ומתמשכת היא אחד מהתרגולים הידועים ביותר לשיקום HRV.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool" onclick="toggleTool(this)">
+        <div class="tool-header">
+          <div class="tool-header-left">
+            <span class="tool-name">להיות כנה עם עצמי לגבי יכולתי</span>
+          </div>
+          <span class="tool-chevron">▾</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">איך</div>
+            <p>אחרי אזעקה, קליפת המוח הקדם-מצחית שלי חלקית לא פעילה למשך 20–60 דקות. זה לא הזמן לחשיבה אסטרטגית עמוקה. עדיף להכיר בכך במקום לדחוף קדימה — זה יעיל יותר בטווח הארוך.</p>
+          </div>
+          <div class="tool-section why">
+            <div class="tool-section-label">למה זה עובד</div>
+            <p>הורמוני לחץ פוגעים באופן פעיל בתפקוד הביצועי. עבודה בכוח מניבה פלט נמוך יותר ומאריכה את זמן ההתאוששות.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer-note">
+    <p>
+      <strong>חשוב:</strong> אני לא חייבת להרגיש רגועה כדי שאלה יעבדו. המטרה היא לא לא לפחד — אלא להעביר את ההפעלה דרך המערכת שלי כדי שלא תצטבר. השימוש בכלים אפילו כשהם לא מרגישים מספיקים — עדיין יעיל.
+    </p>
+  </footer>
+
+  <script>
+    function toggleTool(el) {
+      el.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
